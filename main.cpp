@@ -1,5 +1,4 @@
 #include <iostream>
-/// #include <cstdio>
 #include <ctime>
 #include <fstream>
 
@@ -11,8 +10,6 @@
 #include "progressBar.hpp"
 
 #define time double(clock())/CLOCKS_PER_SEC
-#define PBSTR "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
-#define PBWIDTH 60
 
 vec3 color(const ray& r, hitable *world, int depth){
   hit_record rec;
@@ -66,8 +63,8 @@ int main() {
   std::ofstream outputFile;
   outputFile.open("output.ppm", std::ios::out);
 
-  int nx = 200;
-  int ny = 100;
+  int nx = 256;
+  int ny = 160;
   int ns = 100;
   ProgressBar progressBar(ny, 70);
   outputFile << "P3\n" << nx << " " << ny << "\n255\n";
@@ -89,11 +86,6 @@ int main() {
 
   camera cam(lookfrom, lookat, vec3(0,1,0), 20, float(nx)/float(ny), apture, dist_to_focus);
 
-  /// float R = cos(M_PI/4);
-  /// list[0] = new sphere(vec3(-R, 0, -1), R, new lambertian(vec3(0,0,1)));
-  /// list[1] = new sphere(vec3(R,0,-1), R, new lambertian(vec3(1,0,0)));
-  /// hitable *world = new hitable_list(list,2);
-
   for (int j = ny-1; j >= 0; j--){
     for (int i = 0; i < nx; i++){
       vec3 col(0, 0, 0);
@@ -102,7 +94,6 @@ int main() {
         float v = float(j + drand48()) / float(ny);
 
         ray r = cam.get_ray(u, v);
-        vec3 p = r.point_at_parameter(2.0);
         col += color(r, world, 0);
       }
 
@@ -120,7 +111,6 @@ int main() {
   }
 
   progressBar.done();
-  /// std::cout << "Done, writing to disk...\n";
   outputFile.close();
 
   std::cout << "Time: " << time - a << " sec" << std::endl;
