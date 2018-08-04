@@ -1,1 +1,0 @@
-clang++  -Wall -Wextra -O3 -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/Raytracing.dir/src/main.cpp.o  -o Raytracing 
