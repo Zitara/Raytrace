@@ -5,6 +5,8 @@
 cmake_minimum_required(VERSION 2.6)
 
 # Check if project name has been specified correctly.
+PROJECT(Raytrace)
+
 if((NOT PROJECT_NAME))
   message(FATAL_ERROR "Project name must be specified!")
 endif ((NOT PROJECT_NAME))
@@ -172,3 +174,5 @@ if(WIN32 AND NOT UNIX)
 else(WIN32 AND NOT UNIX)
 endif(WIN32 AND NOT UNIX)
 include(CPack)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
