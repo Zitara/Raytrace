@@ -104,10 +104,13 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LIB_PATH})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LIB_PATH})
 add_library(${LIB_NAME} ${SRC})
 
+find_package(PNG REQUIRED)
+find_package(Threads REQUIRED)
+
 if(BUILD_MAIN)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BIN_PATH})
   add_executable(${MAIN_NAME} ${MAIN_SRC})
-  target_link_libraries(${MAIN_NAME} ${LIB_NAME})
+  target_link_libraries(${MAIN_NAME} ${LIB_NAME} Threads::Threads PNG::PNG)
 endif(BUILD_MAIN)
 
 if(BUILD_DOXYGEN_DOCS)

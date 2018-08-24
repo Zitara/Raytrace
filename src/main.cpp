@@ -39,14 +39,21 @@
 #include <ctime>
 #include <fstream>
 
+#include <pthread.h>
+#include <png.h>
+
 #include "sphere.hpp"
 #include "hitable_list.hpp"
 #include "camera.hpp"
 #include "material.hpp"
 #include "float.h"
 #include "progressBar.hpp"
+#include "imagefilepng.hpp"
 
 #define time double(clock())/CLOCKS_PER_SEC
+#define NUM_THREADS 5
+#define IMAGEH 180
+#define IMAGEW 50
 
 vec3 color(const ray& r, hitable *world, int depth){
   hit_record rec;
@@ -94,63 +101,117 @@ hitable *random_scene(){
   return new hitable_list(list, i);
 }
 
-int main() {
-  std::cout << "Starting Raytracer...\n";
-  double a=time;
-  std::ofstream outputFile;
-  outputFile.open("output.ppm", std::ios::out);
 
-  int nx = 192;
-  int ny = 108;
-  int ns = 100;
-  ProgressBar progressBar(ny, 70);
-  outputFile << "P3\n" << nx << " " << ny << "\n255\n";
 
-  hitable *list[5];
-  list[0] = new sphere(vec3( 0,0,-1), 0.5, new lambertian(vec3(0.1, 0.2, 0.5)));
-  list[1] = new sphere(vec3( 0,-100.5,-1), 100, new lambertian(vec3(0.8, 0.8, 0.0)));
-  list[2] = new sphere(vec3( 1,0,-1), 0.5, new metal(vec3(0.8, 0.6, 0.2), 0.0));
-  list[3] = new sphere(vec3(-1,0,-1), 0.5, new dielectric(1.5));
-  list[4] = new sphere(vec3(-1,0,-1), -0.45, new dielectric(1.5));
+//==================================================================================
+int main(int argc, char *argv[]) {
 
-  hitable *world = new hitable_list(list, 5);
-  world = random_scene();
+    std::cout << "argc: " << argc << std::endl;
+    std::cout << "argv[1]: " << argv[1] << std::endl;
+//    std::cout << "argv[2]: " << argv[2] << std::endl;
 
-  vec3 lookfrom(13,2,3);
-  vec3 lookat(0,0,0);
-  float dist_to_focus = (lookfrom-lookat).length();
-  float apture = 0.1;
+//    if(argc != 3) {
+//        std::cout << "less than 2 inputs provided..";
+//        abort();
+//        return -1;
+//    }
+//    std::cout << "2 inputs provided..";
+//    imageFilepng image;
 
-  camera cam(lookfrom, lookat, vec3(0,1,0), 20, float(nx)/float(ny), apture, dist_to_focus);
+    imageFilepng image(10, 10);//, PNG_COLOR_TYPE_RGB_ALPHA, 8); //, "outputImage.png");
 
-  for (int j = ny-1; j >= 0; j--){
-    for (int i = 0; i < nx; i++){
-      vec3 col(0, 0, 0);
-      for (int s=0; s < ns; s++){
-        float u = float(i + drand48()) / float(nx);
-        float v = float(j + drand48()) / float(ny);
+//    image.read_png_file(argv[1]);
 
-        ray r = cam.get_ray(u, v);
-        col += color(r, world, 0);
-      }
+//    image.width  = 400;
+//    image.height = 300;
 
-      col /= float(ns);
-      col = vec3( sqrt(col[0]), sqrt(col[1]), sqrt(col[2]) );
+//    image.color_type = PNG_COLOR_TYPE_RGB;
+//    image.bit_depth = 8;
 
-      int ir = int(255.99*col[0]);
-      int ig = int(255.99*col[1]);
-      int ib = int(255.99*col[2]);
+//    image.row_pointers = (png_bytep*)malloc(sizeof(png_bytep)*image.height);
+//    for(int y = 0; y < image.height; y++) {
+//      image.row_pointers[y] = (png_byte*)malloc(png_get_rowbytes(png,info));
+//    }
 
-      outputFile << ir << " " << ig << " " << ib << "\n";
+    for (unsigned int y = 0; y < image.height; y++) {
+        png_bytep row = image.row_pointers[y];
+        for (unsigned int x = 0; x < image.width; x++) {
+            png_bytep px = &(row[x*4]);
+
+            // Process:
+//            printf("%4d, %4d = RGBA(%d, %d, %d, 3d)\n", x, y, px[0], px[1], px[2]);//, px[3]);
+
+            px[0] = 200 ;
+//            px[1] = 20 ;
+//            px[2] = 20 ;
+//            px[3] = 100 ;
+//            std::cout << "px: " << px << std::endl;
+
+        }
     }
-    ++progressBar;
-    progressBar.display();
-  }
 
-  progressBar.done();
-  outputFile.close();
+    image.write_png_file("outputImage.png");
 
-  std::cout << "Time: " << time - a << " sec" << std::endl;
+//    return 0;
+
+
+
+//  std::cout << "Starting Raytracer...\n";
+//  double a=time;
+//  std::ofstream outputFile;
+//  outputFile.open("output.ppm", std::ios::out);
+
+//  int nx = 192;
+//  int ny = 108;
+//  int ns = 100;
+//  ProgressBar progressBar(ny, 70);
+//  outputFile << "P3\n" << nx << " " << ny << "\n255\n";
+
+//  hitable *list[5];
+//  list[0] = new sphere(vec3( 0,0,-1), 0.5, new lambertian(vec3(0.1, 0.2, 0.5)));
+//  list[1] = new sphere(vec3( 0,-100.5,-1), 100, new lambertian(vec3(0.8, 0.8, 0.0)));
+//  list[2] = new sphere(vec3( 1,0,-1), 0.5, new metal(vec3(0.8, 0.6, 0.2), 0.0));
+//  list[3] = new sphere(vec3(-1,0,-1), 0.5, new dielectric(1.5));
+//  list[4] = new sphere(vec3(-1,0,-1), -0.45, new dielectric(1.5));
+
+//  hitable *world = new hitable_list(list, 5);
+//  world = random_scene();
+
+//  vec3 lookfrom(13,2,3);
+//  vec3 lookat(0,0,0);
+//  float dist_to_focus = (lookfrom-lookat).length();
+//  float apture = 0.1;
+
+//  camera cam(lookfrom, lookat, vec3(0,1,0), 20, float(nx)/float(ny), apture, dist_to_focus);
+
+//  for (int j = ny-1; j >= 0; j--){
+//    for (int i = 0; i < nx; i++){
+//      vec3 col(0, 0, 0);
+//      for (int s=0; s < ns; s++){
+//        float u = float(i + drand48()) / float(nx);
+//        float v = float(j + drand48()) / float(ny);
+
+//        ray r = cam.get_ray(u, v);
+//        col += color(r, world, 0);
+//      }
+
+//      col /= float(ns);
+//      col = vec3( sqrt(col[0]), sqrt(col[1]), sqrt(col[2]) );
+
+//      int ir = int(255.99*col[0]);
+//      int ig = int(255.99*col[1]);
+//      int ib = int(255.99*col[2]);
+
+//      outputFile << ir << " " << ig << " " << ib << "\n";
+//    }
+//    ++progressBar;
+//    progressBar.display();
+//  }
+
+//  progressBar.done();
+//  outputFile.close();
+
+//  std::cout << "Time: " << time - a << " sec" << std::endl;
 
   return 0;
 }

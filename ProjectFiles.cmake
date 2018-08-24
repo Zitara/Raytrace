@@ -4,8 +4,9 @@
 
 # Set project source files.
 set(SRC
-  "${SRC_PATH}/factorial.cpp"
+#  "${SRC_PATH}/factorial.cpp"
   "${SRC_PATH}/sphere.cpp"
+  "${SRC_PATH}/imagefilepng.cpp"
 )
 
 # Set project main file.
