@@ -2,9 +2,8 @@
 #define IMAGEFILEPNG_H
 
 #include <fstream>
-#include <iostream>
-
 #include <png.h>
+#include <iostream>
 
 class imageFilepng
 {

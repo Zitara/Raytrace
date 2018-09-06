@@ -1,39 +1,8 @@
 /*
- * Copyright (c) <year> <author> (<email>)
+ * Copyright (c) 2018 Zitar (vsvsq8@hotmail.com)
  * Distributed under the MIT License.
  * See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
  */
-
-//#include <cstdlib>
-//#include <iostream>
-//#include <stdexcept>
-
-//#include "cppbase/factorial.hpp"
-
-//int main( const int numberOfInputs, const char* inputArguments[ ] )
-//{
-//	try
-//	{
-//		const int factorial = cppbase::computeFactorial( 10 );
-//		std::cout << "10! = " << factorial << std::endl;
-//	}
-//	catch( std::exception& error )
-//	{
-//		std::cout << error.what( ) << std::endl;
-//	}
-
-//	try
-//	{
-//		const int factorial = cppbase::computeFactorial( -5 );
-//		std::cout << "5! = " << factorial << std::endl;
-//	}
-//	catch( std::exception& error )
-//	{
-//		std::cout << error.what( ) << std::endl;
-//	}
-
-//	return EXIT_SUCCESS;
-//}
 
 #include <iostream>
 #include <ctime>
@@ -105,113 +74,69 @@ hitable *random_scene(){
 
 //==================================================================================
 int main(int argc, char *argv[]) {
-
-    std::cout << "argc: " << argc << std::endl;
-    std::cout << "argv[1]: " << argv[1] << std::endl;
-//    std::cout << "argv[2]: " << argv[2] << std::endl;
-
-//    if(argc != 3) {
-//        std::cout << "less than 2 inputs provided..";
-//        abort();
-//        return -1;
-//    }
-//    std::cout << "2 inputs provided..";
-//    imageFilepng image;
-
-    imageFilepng image(10, 10);//, PNG_COLOR_TYPE_RGB_ALPHA, 8); //, "outputImage.png");
-
-//    image.read_png_file(argv[1]);
-
-//    image.width  = 400;
-//    image.height = 300;
-
-//    image.color_type = PNG_COLOR_TYPE_RGB;
-//    image.bit_depth = 8;
-
-//    image.row_pointers = (png_bytep*)malloc(sizeof(png_bytep)*image.height);
-//    for(int y = 0; y < image.height; y++) {
-//      image.row_pointers[y] = (png_byte*)malloc(png_get_rowbytes(png,info));
-//    }
-
-    for (unsigned int y = 0; y < image.height; y++) {
-        png_bytep row = image.row_pointers[y];
-        for (unsigned int x = 0; x < image.width; x++) {
-            png_bytep px = &(row[x*4]);
-
-            // Process:
-//            printf("%4d, %4d = RGBA(%d, %d, %d, 3d)\n", x, y, px[0], px[1], px[2]);//, px[3]);
-
-            px[0] = 200 ;
-//            px[1] = 20 ;
-//            px[2] = 20 ;
-//            px[3] = 100 ;
-//            std::cout << "px: " << px << std::endl;
-
-        }
-    }
-
-    image.write_png_file("outputImage.png");
-
-//    return 0;
-
-
-
-//  std::cout << "Starting Raytracer...\n";
-//  double a=time;
+  std::cout << "Starting Raytracer...\n";
+  double a=time;
 //  std::ofstream outputFile;
 //  outputFile.open("output.ppm", std::ios::out);
 
-//  int nx = 192;
-//  int ny = 108;
-//  int ns = 100;
-//  ProgressBar progressBar(ny, 70);
+  const unsigned int nx = 192; // 1920
+  const unsigned int ny = 108; // 1080
+  const unsigned int ns = 5;
+  ProgressBar progressBar(ny*nx, 70);
 //  outputFile << "P3\n" << nx << " " << ny << "\n255\n";
+  imageFilepng image(nx, ny);
 
-//  hitable *list[5];
-//  list[0] = new sphere(vec3( 0,0,-1), 0.5, new lambertian(vec3(0.1, 0.2, 0.5)));
-//  list[1] = new sphere(vec3( 0,-100.5,-1), 100, new lambertian(vec3(0.8, 0.8, 0.0)));
-//  list[2] = new sphere(vec3( 1,0,-1), 0.5, new metal(vec3(0.8, 0.6, 0.2), 0.0));
-//  list[3] = new sphere(vec3(-1,0,-1), 0.5, new dielectric(1.5));
-//  list[4] = new sphere(vec3(-1,0,-1), -0.45, new dielectric(1.5));
 
-//  hitable *world = new hitable_list(list, 5);
-//  world = random_scene();
+  hitable *list[5];
+  list[0] = new sphere(vec3( 0,0,-1), 0.5,      new lambertian(vec3(0.1, 0.2, 0.5)));
+  list[1] = new sphere(vec3( 0,-100.5,-1), 100, new lambertian(vec3(0.8, 0.8, 0.0)));
+  list[2] = new sphere(vec3( 1,0,-1), 0.5,      new metal(vec3(0.8, 0.6, 0.2), 0.0));
+  list[3] = new sphere(vec3(-1,0,-1), 0.5,      new dielectric(1.5));
+  list[4] = new sphere(vec3(-1,0,-1), -0.45,    new dielectric(1.5));
 
-//  vec3 lookfrom(13,2,3);
-//  vec3 lookat(0,0,0);
-//  float dist_to_focus = (lookfrom-lookat).length();
-//  float apture = 0.1;
+  hitable *world = new hitable_list(list, 5);
+  world = random_scene();
 
-//  camera cam(lookfrom, lookat, vec3(0,1,0), 20, float(nx)/float(ny), apture, dist_to_focus);
+  vec3 lookfrom(13,2,3);
+  vec3 lookat(0,0,0);
+  float dist_to_focus = (lookfrom-lookat).length();
+  float apture = 0.1;
 
-//  for (int j = ny-1; j >= 0; j--){
-//    for (int i = 0; i < nx; i++){
-//      vec3 col(0, 0, 0);
-//      for (int s=0; s < ns; s++){
-//        float u = float(i + drand48()) / float(nx);
-//        float v = float(j + drand48()) / float(ny);
+  camera cam(lookfrom, lookat, vec3(0,-1,0), 20, float(nx)/float(ny), apture, dist_to_focus);
 
-//        ray r = cam.get_ray(u, v);
-//        col += color(r, world, 0);
-//      }
+  for (unsigned int j = 0; j < ny; j++){
+    png_bytep row = image.row_pointers[j];
+    for (unsigned int i = 0; i <= nx; i++){
+        vec3 col(0, 0, 0);
+        png_bytep px = &(row[i * 3]);
 
-//      col /= float(ns);
-//      col = vec3( sqrt(col[0]), sqrt(col[1]), sqrt(col[2]) );
+        for (unsigned int s=0; s < ns; s++){
+            float u = float(i + drand48()) / float(nx);
+            float v = float(j + drand48()) / float(ny);
 
-//      int ir = int(255.99*col[0]);
-//      int ig = int(255.99*col[1]);
-//      int ib = int(255.99*col[2]);
+            ray r = cam.get_ray(u, v);
+            col += color(r, world, 0);
+        }
+
+        col /= float(ns);
+        col = vec3( sqrt(col[0]), sqrt(col[1]), sqrt(col[2]) );
+
+        px[0] = static_cast<unsigned char>(255.99*col[0]);
+        px[1] = static_cast<unsigned char>(255.99*col[1]);
+        px[2] = static_cast<unsigned char>(255.99*col[2]);
 
 //      outputFile << ir << " " << ig << " " << ib << "\n";
-//    }
-//    ++progressBar;
-//    progressBar.display();
-//  }
+        ++progressBar;
+    }
+    progressBar.display();
+  }
 
-//  progressBar.done();
+  progressBar.done();
 //  outputFile.close();
+  image.write_png_file("outputImage.png");
 
-//  std::cout << "Time: " << time - a << " sec" << std::endl;
+
+  std::cout << "Time: " << time - a << " sec" << std::endl;
 
   return 0;
 }

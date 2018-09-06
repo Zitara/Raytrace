@@ -26,7 +26,7 @@ public:
     void display() const
     {
         float progress = (float) ticks / total_ticks;
-        int pos = (bar_width * progress);
+        int pos = (int) (bar_width * progress);
 
         std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
         auto time_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now-start_time).count();

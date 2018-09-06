@@ -9,9 +9,11 @@ imageFilepng::imageFilepng( unsigned int image_width, unsigned int image_height)
     width = image_width;
     height = image_height;
 
-    row_pointers = (png_bytep*)malloc(sizeof (png_bytep) *image_height);
+//    row_pointers = new png_bytep[image_height];
+    row_pointers = (png_bytep*)malloc(sizeof (png_bytep)*image_height);
     for (unsigned int h = 0; h < image_height ; h++) {
-        row_pointers[h] = (png_bytep)malloc(3 * image_width * sizeof (png_byte));
+//        row_pointers[h] = new png_byte[3*image_width];
+        row_pointers[h] = (png_byte*)malloc(3 * image_width * sizeof (png_byte));
     }
 
 
@@ -65,9 +67,9 @@ void imageFilepng::read_png_file(char *filename){
 
     png_read_update_info(png, info);
 
-    row_pointers = (png_bytep*)malloc(sizeof(png_bytep) * height);
-    for(unsigned int y = 0; y < height; y++) {
-      row_pointers[y] = (png_byte*)malloc(png_get_rowbytes(png,info));
+    row_pointers = new png_bytep[height];
+    for (unsigned int h = 0; h < height ; h++) {
+        row_pointers[h] = new png_byte[3*width];
     }
 
     png_read_image(png, row_pointers);
@@ -76,8 +78,6 @@ void imageFilepng::read_png_file(char *filename){
 }
 
 void imageFilepng::write_png_file(char *filename){
-    unsigned int y =0;
-
     FILE *fp = fopen(filename, "wb");   // Open file for writing (binary mode)
     if(!fp) abort();
 
@@ -110,15 +110,25 @@ void imageFilepng::write_png_file(char *filename){
 
     // To remove the alpha channel for PNG_COLOR_TYPE_RGB format,
     // Use png_set_filler().
-    png_set_filler(png, 0, PNG_FILLER_AFTER);
+//    png_set_filler(png, 0, PNG_FILLER_AFTER);
 
     png_write_image(png, row_pointers); // Write image data
     png_write_end(png, nullptr);        // End write
 
-    for( y = 0; y < height; y++) {
-      free(row_pointers[y]);
+//    for(unsigned int h = 0 ; h < height; h++) {
+//      free(row_pointers[h]);
+//    }
+//    free(row_pointers);
+
+//    std::cout << "image height: " << height << std::endl;
+
+    for(unsigned int h = 0 ; h < height; ++h) {
+//        delete[] row_pointers[h];
+        free(row_pointers[h]);
     }
+//    delete[] row_pointers;
     free(row_pointers);
+//    row_pointers = nullptr;
 
     fclose(fp);
 }
