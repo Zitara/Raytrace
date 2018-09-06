@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
 
   const unsigned int nx = 192; // 1920
   const unsigned int ny = 108; // 1080
-  const unsigned int ns = 5;
+  const unsigned int ns = 50;
   ProgressBar progressBar(ny*nx, 70);
 //  outputFile << "P3\n" << nx << " " << ny << "\n255\n";
   imageFilepng image(nx, ny);
