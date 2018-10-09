@@ -79,6 +79,7 @@ void imageFilepng::read_png_file(char *filename){
 
 void imageFilepng::write_png_file(char *filename){
     FILE *fp = fopen(filename, "wb");   // Open file for writing (binary mode)
+//    FILE *fp = fopen(filename, std::ofstream::out | std::ofstream::trunc);
     if(!fp) abort();
 
     png_structp png = png_create_write_struct(

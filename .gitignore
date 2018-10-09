@@ -29,6 +29,8 @@
 
 # Build system
 build
+build-Release
+build-Debug
 bin
 lib
 doxydocs
@@ -38,6 +40,9 @@ external
 
 # Project files
 *.sublime*
+CMakeLists.text.user
+Makefile
+compile_commands.json
 
 # System files
 .DS_Store
