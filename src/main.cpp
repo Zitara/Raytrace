@@ -21,10 +21,10 @@
 #include "imagefilepng.hpp"
 
 #define time double(clock())/CLOCKS_PER_SEC
-#define NUM_THREADS 8  // power of 2; 0 for 1
+#define NUM_THREADS 4  // power of 2; 0 for 1
 #define IMAGEH 1080 // divides by 2, 6, 8
 #define IMAGEW 1920
-#define IMAGES 1
+#define IMAGES 1000
 
 //unsigned int jobLocation = 0; // image height, for other threads to keep working on.
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Raytrace
 One week project by Peter Shirley (https://github.com/petershirley).
 This project was made by following an online tutorial.
@@ -131,3 +132,6 @@ Disclaimer
 ------
 
 The copyright holders are not liable for any damage(s) incurred due to improper use of `cppbase`.
+=======
+# Raytrce
+>>>>>>> origin/master
