@@ -5,6 +5,8 @@
 cmake_minimum_required(VERSION 2.6)
 
 # Check if project name has been specified correctly.
+PROJECT(Raytrace)
+
 if((NOT PROJECT_NAME))
   message(FATAL_ERROR "Project name must be specified!")
 endif ((NOT PROJECT_NAME))
@@ -14,12 +16,12 @@ endif(${PROJECT_NAME} MATCHES " ")
 
 # Change this section to correspond with your project info.
 project(${PROJECT_NAME} C CXX)
-set(${CMAKE_PROJECT_NAME}_SUMMARY              "${PROJECT_SUMMARY}")
-set(${CMAKE_PROJECT_NAME}_VENDOR_NAME          "${PROJECT_VENDOR_NAME}")
-set(${CMAKE_PROJECT_NAME}_VENDOR_CONTACT       "${PROJECT_VENDOR_CONTACT}")
+set(${CMAKE_PROJECT_NAME}_SUMMARY              "${PROJECT_SUMMARY} Raytracing engine to practice programming and math.")
+set(${CMAKE_PROJECT_NAME}_VENDOR_NAME          "${PROJECT_VENDOR_NAME} Zitar")
+set(${CMAKE_PROJECT_NAME}_VENDOR_CONTACT       "${PROJECT_VENDOR_CONTACT} vsvsq8@hotmail.com")
 set(${CMAKE_PROJECT_NAME}_VERSION_MAJOR        0)
-set(${CMAKE_PROJECT_NAME}_VERSION_MINOR        0)
-set(${CMAKE_PROJECT_NAME}_VERSION_PATCH        0)
+set(${CMAKE_PROJECT_NAME}_VERSION_MINOR        1)
+set(${CMAKE_PROJECT_NAME}_VERSION_PATCH        1)
 set(PROJECT_VERSION
   "${${CMAKE_PROJECT_NAME}_VERSION_MAJOR}.${${CMAKE_PROJECT_NAME}_VERSION_MINOR}.${${CMAKE_PROJECT_NAME}_VERSION_PATCH}")
 
@@ -102,10 +104,13 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LIB_PATH})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LIB_PATH})
 add_library(${LIB_NAME} ${SRC})
 
+find_package(PNG REQUIRED)
+find_package(Threads REQUIRED)
+
 if(BUILD_MAIN)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BIN_PATH})
   add_executable(${MAIN_NAME} ${MAIN_SRC})
-  target_link_libraries(${MAIN_NAME} ${LIB_NAME})
+  target_link_libraries(${MAIN_NAME} ${LIB_NAME} Threads::Threads PNG::PNG)
 endif(BUILD_MAIN)
 
 if(BUILD_DOXYGEN_DOCS)
@@ -172,3 +177,6 @@ if(WIN32 AND NOT UNIX)
 else(WIN32 AND NOT UNIX)
 endif(WIN32 AND NOT UNIX)
 include(CPack)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_STANDARD 11)

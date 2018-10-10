@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+# Raytrace
+One week project by Peter Shirley (https://github.com/petershirley).
+This project was made by following an online tutorial.
+
+Current focus is on performance improvements:
+- Parallel computation.
+- Binary output file, may change to .jpeg or .png format.
+- Relay on ram memory instead of printing each row of pixels to a file.
+
 cppbase
 ===
 
@@ -122,3 +132,6 @@ Disclaimer
 ------
 
 The copyright holders are not liable for any damage(s) incurred due to improper use of `cppbase`.
+=======
+# Raytrce
+>>>>>>> origin/master
